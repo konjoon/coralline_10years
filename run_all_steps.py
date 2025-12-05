@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Last modified on Dec 2 12:51:25 2025
-Editor: Spyder
 
-@author: konjoon 
+@author: konjoon and chatgpt
 
 This script runs a complete 3-step pipeline to analyze how
 environmental variables are related to the expansion of
@@ -725,7 +724,7 @@ cb3 = df_corr[df_corr["CB_type"] == "CB_3"].copy()
 
 if cb3.empty:
     cb3_matrix = pd.DataFrame()
-    print("Warning: No CB_3 rows found in admin_CB_env_timeseries_correlation.")
+    print("Warning: No CB3 rows found in admin_CB_env_timeseries_correlation.")
 else:
     cb3_matrix = cb3.pivot(index=["region", "admin"], columns="variable", values="cor_ts")
     cb3_matrix = cb3_matrix.fillna(0)
@@ -927,7 +926,7 @@ else:
 # -------------------------------------------------------------------
 
 if "cb3_matrix" not in locals():
-    print("Warning: cb3_matrix not found in memory; skipping CB_3 heatmap.")
+    print("Warning: cb3_matrix not found in memory; skipping CB3 heatmap.")
 else:
     cb3_plot = cb3_matrix.copy()
 
@@ -955,12 +954,12 @@ else:
             vmax=1,
             linewidths=0.5,
             linecolor="gray",
-            cbar_kws={"label": "Correlation (CB_3 vs Env)"}
+            cbar_kws={"label": "Correlation (CB3 vs Env)"}
         )
 
         ax.set_xlabel("Environmental variables", fontsize=14)
         ax.set_ylabel("Region / Admin", fontsize=14)
-        ax.set_title("Within-admin correlation: CB_3 vs environmental variables",
+        ax.set_title("Within-admin correlation: CB3 vs environmental variables",
                      fontsize=18, pad=20)
 
         plt.xticks(rotation=90)
@@ -1337,6 +1336,12 @@ else:
 cb3_slope_long = admin_cb_env_long[admin_cb_env_long["CB_type"] == "CB_3"].copy()
 
 if not cb3_slope_long.empty:
+    cb3_slope_long["region_admin"] = (
+            cb3_slope_long["region"].astype(str)
+            + " / "
+            + cb3_slope_long["admin"].astype(str)
+    )
+        
     all_vars = sorted(cb3_slope_long["variable"].dropna().unique())
     panel_tags = [f"({chr(97 + i)})" for i in range(len(all_vars))]
 
@@ -1346,7 +1351,7 @@ if not cb3_slope_long.empty:
 
     fig, axes = plt.subplots(
         nrows, ncols,
-        figsize=(5 * ncols, 4 * nrows),
+        figsize=(5 * ncols, 3.2 * nrows),
         sharey=True
     )
     axes = np.array(axes).reshape(-1)
@@ -1373,6 +1378,15 @@ if not cb3_slope_long.empty:
             ax=ax
         )
 
+        for _, row in sub.iterrows():
+            ax.text(
+                row["env_slope"],
+                row["cb_slope"],
+                row["region_admin"],   # 예: "Jeju / Seogwipo"
+                fontsize=6,
+                alpha=0.6
+            )
+            
         ax.set_xlabel(f"{panel_tags[i]} {var_name} slope")
         ax.set_ylabel("CB3 slope")
 
@@ -1386,10 +1400,10 @@ if not cb3_slope_long.empty:
     )
     plt.tight_layout(rect=[0, 0, 1, 0.96])
 
-    scatter_path = step3_prefix + "CB3_vs_env_slope_scatter_matrix.png"
+    scatter_path = step3_prefix + "CB3_vs_env_slope_scatter_plots.png"
     plt.savefig(scatter_path, dpi=300)
     plt.close()
-    print(f"[STEP3] CB3_vs_env_slope_scatter_matrix saved → {scatter_path}")
+    print(f"[STEP3] CB3_vs_env_slope_scatter_plots saved → {scatter_path}")
 
 
 # -------------------------------------------------------------------
@@ -1480,5 +1494,3 @@ else:
     print(f"[STEP3] Decoupling_Matrix_Temperature saved → {matrix_plot_path}")
 
 print("[STEP3] All steps completed!")
-
-
