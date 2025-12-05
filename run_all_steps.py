@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Last modified on Dec 2 12:51:25 2025
+Editor: Spyder
 
 @author: konjoon 
 
@@ -1479,4 +1480,5 @@ else:
     print(f"[STEP3] Decoupling_Matrix_Temperature saved → {matrix_plot_path}")
 
 print("[STEP3] All steps completed!")
+
 
