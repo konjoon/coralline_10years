@@ -47,12 +47,33 @@ All datasets are uploaded in three chronological stages:
 
 ### **Main Scripts (Examples)**
 
-| Script                              | Purpose                                                                     |
-| ----------------------------------- | --------------------------------------------------------------------------- |
-| `01_load_and_clean.ipynb`           | Preprocessing of raw survey datasets                                        |
-| `02_merge_env_and_depth.ipynb`      | Creation of depth-adjusted environmental time series (Step 1)               |
-| `03_panel_and_slope_analysis.ipynb` | Construction of quarterly panels, slope estimation, CB–environment linkages |
-| `04_visualization_step3.ipynb`      | Generation of heatmaps, decoupling matrices, and integrated trend figures   |
+run_all_steps.py
+
+This is the complete analysis pipeline integrating all three stages:
+
+Step 1 – Depth Adjustment
+Performs per-station regression to remove depth effects from environmental variables.
+Output: step1_stid_depth_adjusted_env.csv
+
+Step 2 – Trend & Correlation Analysis
+Builds quarterly panels, computes environmental/CB3 slopes, and generates CB3–environment correlation matrices.
+Output examples:
+
+step2_tab2_admin_CB3_slope_summary.csv
+
+step2_CB3_env_correlation_table.csv
+
+Step 3 – Visualization & Integrated Matrices
+Generates manuscript-ready figures and integrated ecological–environmental frameworks.
+Output examples:
+
+fig3_Normalized_slopes_of_env._variables.png
+
+fig4_Trends_of_CB3_by_municipality_2014-2024.png
+
+fig6_Environment-ecology_decoupling_matrix_for_temperature.png
+
+env_CB3_combined_table.csv
 
 ---
 
